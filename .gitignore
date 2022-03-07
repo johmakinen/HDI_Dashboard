@@ -4,7 +4,14 @@ __pycache__/
 *$py.class
 
 
+# vscode settings folder
 .vscode/
+
+# PowerPoint temporary
+~$*.ppt*
+
+# Powerpoint
+*.ppt*
 
 # C extensions
 *.so

@@ -51,7 +51,7 @@ def process_raw_data():
                    ]
 
     res = reduce(lambda left, right: pd.merge(left, right, on=['Country', 'Year'],
-                                              how='inner'), data_frames)
+                                              how='inner'), data_frames).applymap(lambda x: x.strip() if isinstance(x, str) else x)
     res.to_csv(path_processed_data+'processed_data.csv', index=False)
 
     return res
