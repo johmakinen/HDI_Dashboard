@@ -23,7 +23,7 @@ DATA_PATH = cwd+'\data\processed\processed_data.csv'
 @st.experimental_memo
 def load_data():
     data = pd.read_csv(DATA_PATH)
-    return data
+    return data.query('Year >= 2010')
 
 
 @st.experimental_memo
@@ -45,7 +45,7 @@ current_data = select_data(data, countries=selected_countries)
 # LAYOUT
 t1, t2 = st.columns(2)
 with t1:
-    st.title('Human Development Index')
+    st.title('Human Development Index (HDI)')
 
 with t2:
     st.write("")
@@ -55,31 +55,42 @@ with t2:
     """)
 
 st.write("")
-st.markdown("""This is a dashboard for visualizing Human Development Index (HDI),
-    and the indices from which it is calculated.""")
+
+st.markdown("""_\"The HDI was created to emphasize that people and their capabilities should be the ultimate criteria for assessing the development of a country,
+ not economic growth alone. The HDI can also be used to question national policy choices, asking how two countries with
+  the same level of GNI per capita can end up with different human development outcomes.\"_ - United Nations Development Program""")
+st.markdown("""In short, HDI measures the development level of a country or area by combining common metrics.
+            Though the measure has gotten critisism for not accounting racism, inequality and history of colonial actions,
+            the metric itself is quite interesting to study. There are also other metrics that calculate the HDI by accounting for
+            the aforementioned problems.""")
 
 
-st.header("So how is the HDI explicitly calculated?")
+st.header("HDI mathematically")
+
 
 with st.container():
-    image = Image.open(cwd+'\\figures\\hdi_2020.jpg')
+    image = Image.open(cwd+'\\figures\\draw_hdi_form.png')
     st.image(image,
-             caption="HDI calculated from its component indices. Source: en.wikipedia.org/wiki/Human_Development_Index")
+             caption="HDI calculated from its component indices.",
+             output_format='PNG')
 
-st.markdown("""We can see that HDI is calculated using three main components. These components can be further inspected.""")
-col1, col2 = st.columns(2)
+st.markdown("""We can see that HDI is calculated using three main components: Health, Education and the standard of living.
+                The values are scaled using the min-max method to make them comparable between countries. According to UN,
+                the transformation function from income to capability is likely to be concave, and thus a logarithm is
+                used when calculating the Income Index.
+            """)
 
-with col1:
-    image = Image.open(cwd+"\\figures\\hdi_new_method.png")
-    st.image(image, caption='Source en.wikipedia.org/wiki/Human_Development_Index')
+df_static_norm = pd.DataFrame([['Health', 'Education', 'Education', 'Standard of living'],
+                               ['Life expectancy', 'Expected years of schooling',
+                                   'Mean years of schooling', 'GNI per capita ($)'],
+                               [20, 0, 0, 100],
+                               [85, 18, 15, 75000]],
+                              index=['Dimension', 'Indicator', 'Minimum', 'Maximum']).T.astype(str)
 
-with col2:
-    image = Image.open(cwd+"\\figures\\hdi_old_method.jpg")
-    st.image(image, caption='Source: en.wikipedia.org/wiki/Human_Development_Index')
+st.write(df_static_norm)
 
-st.subheader("Now that we know what the HDI stands for and how its calculated, we can visualize the data that we have on different countries.")
+st.header("HDI numbers presented")
 
-
-st.write("Below we have a cleaned dataset from the United Nations Development Programme")
+st.write("Below we have a cleaned dataset from the United Nations Development Programme. For all the following tables and charts, you can select the countries from the sidebar on the left.")
 
 st.write(current_data)
