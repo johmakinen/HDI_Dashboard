@@ -5,6 +5,10 @@ import numpy as np
 import os
 from PIL import Image
 
+# My modules
+from src.feature_fn.data_features import add_indices
+from src.visualization_fn.data_visualization import plot_index
+
 
 st.set_page_config(
     page_title="Human Development Index",
@@ -31,6 +35,11 @@ def select_data(df, countries: list[str]):
     return df.query('Country in @countries')
 
 
+@st.experimental_memo
+def add_ind(df):
+    return add_indices(df)
+
+
 # Get full dataset and cache it (6k rows, should be doable)
 data = load_data()
 
@@ -51,7 +60,7 @@ with t2:
     st.write("")
     st.write("")
     st.write("""
-    **By Johannes Mäkinen** | [johmakinen.github.io](https://johmakinen.github.io) 
+    **By Johannes Mäkinen** | [johmakinen.github.io](https://johmakinen.github.io)
     """)
 
 st.write("")
@@ -91,6 +100,19 @@ st.write(df_static_norm)
 
 st.header("HDI numbers presented")
 
-st.write("Below we have a cleaned dataset from the United Nations Development Programme. For all the following tables and charts, you can select the countries from the sidebar on the left.")
+st.write("""Below we have a cleaned dataset from the United Nations Development Programme.
+ For all the following tables and charts, you can select the countries from the sidebar on the left. 
+ The Gross National Income is in dollars ($).""")
 
-st.write(current_data)
+st.write(current_data.style.format({'Expected_years_of_schooling': "{:.2f}",
+                                    'Mean_years_of_schooling': "{:.2f}",
+                                    'Life_expectancy_at_birth': "{:.2f}",
+                                    'Gross_national_income_per_capita': "{:.0f}"}))
+data_ind = add_ind(current_data)
+
+p1, _, p2 = st.columns((3, 0.2, 3))
+with p1:
+    st.plotly_chart(plot_index(data_ind, 'LEI'), use_container_width=True)
+
+with p2:
+    st.plotly_chart(plot_index(data_ind, 'EI'), use_container_width=True)

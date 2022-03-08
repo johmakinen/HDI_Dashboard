@@ -52,6 +52,8 @@ def process_raw_data():
 
     res = reduce(lambda left, right: pd.merge(left, right, on=['Country', 'Year'],
                                               how='inner'), data_frames).applymap(lambda x: x.strip() if isinstance(x, str) else x)
+    res = res.replace('..', np.nan).astype({'Year': 'int32', 'Expected_years_of_schooling': 'float',
+                                            'Gross_national_income_per_capita': 'float', 'Life_expectancy_at_birth': 'float', 'Mean_years_of_schooling': 'float'})
     res.to_csv(path_processed_data+'processed_data.csv', index=False)
 
     return res
