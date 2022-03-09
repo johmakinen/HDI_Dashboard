@@ -21,7 +21,8 @@ st.set_page_config(
 # FUNCTIONS
 
 cwd = os.getcwd()
-DATA_PATH = cwd+'\data\processed\processed_data.csv'
+# DATA_PATH = cwd+'\data\processed\processed_data.csv'
+DATA_PATH = cwd+'/data/processed/processed_data.csv'
 
 
 @st.experimental_memo
@@ -78,7 +79,8 @@ st.header("HDI mathematically")
 
 
 with st.container():
-    image = Image.open(cwd+'\\figures\\draw_hdi_form.png')
+    # image = Image.open(cwd+'\\figures\\draw_hdi_form.png')
+    image = Image.open(cwd+'/figures/draw_hdi_form.png')
     st.image(image,
              caption="HDI calculated from its component indices.",
              output_format='PNG')
