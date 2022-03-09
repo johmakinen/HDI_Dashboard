@@ -46,7 +46,7 @@ data = load_data()
 # Select data according to the input
 st.sidebar.title("Select countries/areas to be presented")
 selected_countries = st.sidebar.multiselect(
-    '', set(data['Country'].values), default=['World'])
+    '', set(data['Country'].values), default=['Finland', 'Sweden'])
 current_data = select_data(data, countries=selected_countries)
 
 
@@ -84,7 +84,7 @@ with st.container():
              output_format='PNG')
 
 st.markdown("""We can see that HDI is calculated using three main components: Health, Education and the standard of living.
-                The values are scaled using the min-max method to make them comparable between countries. According to UN,
+                The values are scaled to make them comparable between countries. According to UN,
                 the transformation function from income to capability is likely to be concave, and thus a logarithm is
                 used when calculating the Income Index.
             """)
@@ -102,7 +102,7 @@ st.header("HDI numbers presented")
 
 st.write("""Below we have a cleaned dataset from the United Nations Development Programme.
  For all the following tables and charts, you can select the countries from the sidebar on the left. 
- The Gross National Income is in dollars ($).""")
+ The Gross National Income is in dollars ($). Further below we have some visualizations for each of the indices.""")
 
 st.write(current_data.style.format({'Expected_years_of_schooling': "{:.2f}",
                                     'Mean_years_of_schooling': "{:.2f}",
@@ -127,7 +127,7 @@ with p3:
                     use_container_width=True)
 
 
-map_data = add_indices(data)
+map_data = add_indices(data.query('Year == 2019'))
 c1, c2 = st.columns((0.5, 4))
 
 with c1:
