@@ -7,7 +7,7 @@ from PIL import Image
 
 # My modules
 from src.feature_fn.data_features import add_indices
-from src.visualization_fn.data_visualization import plot_index
+from src.visualization_fn.data_visualization import plot_index, plot_map
 
 
 st.set_page_config(
@@ -110,9 +110,29 @@ st.write(current_data.style.format({'Expected_years_of_schooling': "{:.2f}",
                                     'Gross_national_income_per_capita': "{:.0f}"}))
 data_ind = add_ind(current_data)
 
-p1, _, p2 = st.columns((3, 0.2, 3))
+st.plotly_chart(plot_index(data_ind, 'HDI'), use_container_width=True)
+
+# This layout could be better, problem is three figures and not enough room in one row...
+p1, p2, p3 = st.columns(3)  # st.columns((3, 0.2, 3))
 with p1:
-    st.plotly_chart(plot_index(data_ind, 'LEI'), use_container_width=True)
+    st.plotly_chart(plot_index(data_ind, 'LEI'),
+                    use_container_width=True)
 
 with p2:
-    st.plotly_chart(plot_index(data_ind, 'EI'), use_container_width=True)
+    st.plotly_chart(plot_index(data_ind, 'EI'),
+                    use_container_width=True)
+
+with p3:
+    st.plotly_chart(plot_index(data_ind, 'II'),
+                    use_container_width=True)
+
+
+map_data = add_indices(data)
+c1, c2 = st.columns((0.5, 4))
+
+with c1:
+    metric = st.radio('Select index to show on the map',
+                      ('HDI', 'LEI', 'EI', 'II'))
+
+with c2:
+    st.plotly_chart(plot_map(map_data, metric), use_container_width=True)

@@ -31,7 +31,7 @@ def test_indexed_data():
     # 'There is not colun for which there are over 15% nan values'
     assert test_data.isnull().mean().max() < 15/100
     # 'There is no country for which there are only a few years of data'
-    assert test_data.T.isnull().mean().max() < 80/100
+    assert test_data.T.isnull().mean().max() < 85/100
 
 
 # Instructions:

@@ -10,5 +10,5 @@ def add_indices(df):
                  res['Expected_years_of_schooling']/18) / 2
     res['II'] = (np.log(res['Gross_national_income_per_capita']) -
                  np.log(100)) / (np.log(75000)-np.log(100))
-
+    res['HDI'] = np.power(res['LEI']*res['EI']*res['II'], (1/3))
     return res
